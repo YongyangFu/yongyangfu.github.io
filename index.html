@@ -1,0 +1,906 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Yongyang Fu — Finance × Data Science × AI</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --navy:         #0a0f1e;
+      --navy2:        #0d1528;
+      --blue:         #3b82f6;
+      --cyan:         #06b6d4;
+      --purple:       #8b5cf6;
+      --green:        #22c55e;
+      --text:         #e2e8f0;
+      --muted:        #94a3b8;
+      --glass:        rgba(255,255,255,0.06);
+      --glass-border: rgba(255,255,255,0.12);
+      --blur:         16px;
+      --radius:       16px;
+      --tr:           200ms ease;
+    }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--navy);
+      color: var(--text);
+      line-height: 1.6;
+      font-size: 16px;
+      overflow-x: hidden;
+    }
+    h1,h2,h3,h4 { font-family: 'Space Grotesk', sans-serif; line-height: 1.2; }
+    a { color: inherit; text-decoration: none; }
+
+    /* ── Scroll Progress ─────────────────────────────── */
+    #progress-bar {
+      position: fixed; top: 0; left: 0; height: 3px; width: 0%;
+      background: linear-gradient(90deg, var(--blue), var(--cyan));
+      z-index: 1000; transition: width 0.1s linear;
+      box-shadow: 0 0 10px var(--cyan);
+    }
+
+    /* ── Nav ─────────────────────────────────────────── */
+    nav {
+      position: fixed; top: 16px; left: 50%; transform: translateX(-50%);
+      z-index: 900;
+      display: flex; align-items: center; gap: 6px;
+      padding: 10px 20px;
+      background: rgba(10,15,30,0.8);
+      backdrop-filter: blur(var(--blur)); -webkit-backdrop-filter: blur(var(--blur));
+      border: 1px solid var(--glass-border);
+      border-radius: 50px;
+      width: min(800px, calc(100vw - 32px));
+    }
+    .nav-logo {
+      font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 0.9rem;
+      background: linear-gradient(135deg, var(--blue), var(--cyan));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+      white-space: nowrap; margin-right: auto;
+    }
+    .nav-links { display: flex; gap: 2px; }
+    .nav-links a {
+      padding: 6px 11px; border-radius: 50px; font-size: 0.8rem; font-weight: 500;
+      color: var(--muted); transition: color var(--tr), background var(--tr);
+      cursor: pointer; white-space: nowrap;
+    }
+    .nav-links a:hover, .nav-links a.active { color: var(--text); background: var(--glass); }
+    .nav-links a.active { color: var(--cyan); }
+    .nav-cta {
+      padding: 6px 16px !important;
+      background: linear-gradient(135deg, var(--blue), var(--cyan)) !important;
+      color: #fff !important; font-weight: 600 !important;
+    }
+    .nav-cta:hover { opacity: 0.85; }
+
+    /* ── Hero ────────────────────────────────────────── */
+    #hero {
+      position: relative; min-height: 100vh;
+      display: flex; align-items: center; justify-content: center; overflow: hidden;
+    }
+    #hero-canvas { position: absolute; inset: 0; z-index: 0; }
+    .glow {
+      position: absolute; border-radius: 50%; filter: blur(120px);
+      opacity: 0.15; pointer-events: none;
+    }
+    .glow-1 { width: 600px; height: 600px; background: var(--blue); top: -120px; left: -200px; }
+    .glow-2 { width: 500px; height: 500px; background: var(--cyan); bottom: -80px; right: -150px; }
+    .hero-content { position: relative; z-index: 1; text-align: center; max-width: 820px; padding: 0 24px; }
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 5px 16px;
+      background: var(--glass); border: 1px solid var(--glass-border); border-radius: 50px;
+      font-size: 0.78rem; color: var(--cyan); font-weight: 500; margin-bottom: 28px;
+      backdrop-filter: blur(8px);
+    }
+    .badge-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--cyan); animation: pulse 2s infinite; }
+    @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.5;transform:scale(0.75)} }
+    .hero-name {
+      font-size: clamp(2.8rem, 7vw, 5.5rem); font-weight: 700; letter-spacing: -0.02em; margin-bottom: 8px;
+      background: linear-gradient(135deg, #fff 30%, var(--cyan) 100%);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    }
+    .hero-zh { font-size: 1rem; color: var(--muted); margin-bottom: 18px; letter-spacing: 0.05em; }
+    .hero-role {
+      font-family: 'Space Grotesk', sans-serif; font-size: clamp(1rem, 2.5vw, 1.45rem);
+      font-weight: 500; color: var(--blue); margin-bottom: 24px; min-height: 1.8em;
+    }
+    .hero-cursor {
+      display: inline-block; width: 2px; height: 1.1em; background: var(--cyan);
+      margin-left: 2px; vertical-align: middle; animation: blink 1s step-end infinite;
+    }
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
+    .hero-sub { font-size: 0.97rem; color: var(--muted); max-width: 580px; margin: 0 auto 40px; line-height: 1.8; }
+    .hero-btns { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+    .btn-primary {
+      padding: 13px 30px; background: linear-gradient(135deg, var(--blue), var(--cyan));
+      border-radius: 50px; font-family: 'Space Grotesk', sans-serif; font-weight: 600; font-size: 0.93rem;
+      color: #fff; cursor: pointer; transition: opacity var(--tr), transform var(--tr), box-shadow var(--tr);
+      box-shadow: 0 4px 24px rgba(59,130,246,0.3);
+    }
+    .btn-primary:hover { opacity: 0.88; transform: translateY(-2px); box-shadow: 0 8px 32px rgba(59,130,246,0.45); }
+    .btn-secondary {
+      padding: 13px 30px; background: var(--glass); border: 1px solid var(--glass-border);
+      border-radius: 50px; font-family: 'Space Grotesk', sans-serif; font-weight: 600; font-size: 0.93rem;
+      color: var(--text); cursor: pointer; backdrop-filter: blur(8px);
+      transition: background var(--tr), border-color var(--tr), transform var(--tr);
+    }
+    .btn-secondary:hover { background: rgba(255,255,255,0.1); border-color: var(--cyan); transform: translateY(-2px); }
+    .hero-scroll {
+      position: absolute; bottom: 32px; left: 50%; transform: translateX(-50%);
+      display: flex; flex-direction: column; align-items: center; gap: 6px;
+      color: var(--muted); font-size: 0.72rem; animation: bounce 2s infinite;
+    }
+    @keyframes bounce { 0%,100%{transform:translateX(-50%) translateY(0)} 50%{transform:translateX(-50%) translateY(8px)} }
+
+    /* ── Section Shared ───────────────────────────────── */
+    section { padding: 100px 24px; }
+    .container { max-width: 1080px; margin: 0 auto; }
+    .section-label {
+      display: inline-flex; align-items: center; gap: 10px;
+      font-size: 0.75rem; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase;
+      color: var(--cyan); margin-bottom: 14px;
+    }
+    .section-label::before { content:''; display:inline-block; width:22px; height:2px; background:var(--cyan); border-radius:2px; }
+    .section-title { font-size: clamp(1.8rem, 4vw, 2.6rem); font-weight: 700; margin-bottom: 14px; letter-spacing: -0.01em; }
+    .section-sub { color: var(--muted); max-width: 560px; line-height: 1.8; margin-bottom: 52px; font-size: 0.95rem; }
+    .fade-up { opacity: 0; transform: translateY(28px); transition: opacity 0.55s ease, transform 0.55s ease; }
+    .fade-up.visible { opacity: 1; transform: translateY(0); }
+
+    /* ── Identity (4 Summary Cards) ───────────────────── */
+    #identity { background: var(--navy2); }
+    .identity-intro {
+      max-width: 620px; margin-bottom: 52px;
+    }
+    .identity-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 20px;
+    }
+    .id-card {
+      padding: 32px;
+      background: var(--glass);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius);
+      backdrop-filter: blur(var(--blur));
+      transition: border-color var(--tr), transform var(--tr), box-shadow var(--tr);
+      cursor: default;
+      position: relative;
+      overflow: hidden;
+    }
+    .id-card::before {
+      content: '';
+      position: absolute; top: 0; left: 0; right: 0; height: 2px;
+      opacity: 0;
+      transition: opacity var(--tr);
+    }
+    .id-card:hover { transform: translateY(-5px); box-shadow: 0 16px 48px rgba(0,0,0,0.2); }
+    .id-card:hover::before { opacity: 1; }
+    .id-card:hover { border-color: transparent; }
+
+    .id-card-1::before { background: linear-gradient(90deg, var(--blue), var(--cyan)); }
+    .id-card-1:hover { border-color: rgba(59,130,246,0.4); box-shadow: 0 16px 48px rgba(59,130,246,0.12); }
+
+    .id-card-2::before { background: linear-gradient(90deg, var(--cyan), var(--purple)); }
+    .id-card-2:hover { border-color: rgba(6,182,212,0.4); box-shadow: 0 16px 48px rgba(6,182,212,0.1); }
+
+    .id-card-3::before { background: linear-gradient(90deg, var(--purple), var(--blue)); }
+    .id-card-3:hover { border-color: rgba(139,92,246,0.4); box-shadow: 0 16px 48px rgba(139,92,246,0.1); }
+
+    .id-card-4::before { background: linear-gradient(90deg, var(--green), var(--cyan)); }
+    .id-card-4:hover { border-color: rgba(34,197,94,0.4); box-shadow: 0 16px 48px rgba(34,197,94,0.08); }
+
+    .id-num {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 0.72rem; font-weight: 700; letter-spacing: 0.1em;
+      text-transform: uppercase; margin-bottom: 16px;
+    }
+    .id-card-1 .id-num { color: var(--blue); }
+    .id-card-2 .id-num { color: var(--cyan); }
+    .id-card-3 .id-num { color: var(--purple); }
+    .id-card-4 .id-num { color: var(--green); }
+
+    .id-title {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1.15rem; font-weight: 700; margin-bottom: 12px; line-height: 1.3;
+    }
+    .id-desc {
+      font-size: 0.88rem; color: var(--muted); line-height: 1.8;
+    }
+    .id-desc strong { color: var(--text); }
+
+    /* ── About (credentials strip) ───────────────────── */
+    #about { background: var(--navy); }
+    .about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: start; }
+    .about-text p { color: var(--muted); line-height: 1.85; margin-bottom: 18px; font-size: 0.95rem; }
+    .about-text p strong { color: var(--text); }
+    .about-targets { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 6px; }
+    .target-badge {
+      font-size: 0.75rem; font-weight: 500; padding: 4px 12px; border-radius: 50px;
+      background: rgba(6,182,212,0.08); border: 1px solid rgba(6,182,212,0.22); color: var(--cyan);
+    }
+    .about-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    .stat-card {
+      padding: 22px; background: var(--glass); border: 1px solid var(--glass-border);
+      border-radius: var(--radius); backdrop-filter: blur(var(--blur)); text-align: center;
+      transition: border-color var(--tr), transform var(--tr); cursor: default;
+    }
+    .stat-card:hover { border-color: var(--blue); transform: translateY(-4px); }
+    .stat-num {
+      font-family: 'Space Grotesk', sans-serif; font-size: 2rem; font-weight: 700;
+      background: linear-gradient(135deg, var(--blue), var(--cyan));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    }
+    .stat-label { font-size: 0.77rem; color: var(--muted); margin-top: 4px; }
+
+    /* ── Experience ───────────────────────────────────── */
+    #experience { background: var(--navy2); }
+    .timeline { position: relative; padding-left: 32px; }
+    .timeline::before {
+      content: ''; position: absolute; left: 0; top: 8px; bottom: 8px;
+      width: 2px; background: linear-gradient(180deg, var(--blue), var(--cyan), transparent); border-radius: 2px;
+    }
+    .tl-item {
+      position: relative; margin-bottom: 28px; padding: 26px 28px;
+      background: var(--glass); border: 1px solid var(--glass-border); border-radius: var(--radius);
+      backdrop-filter: blur(var(--blur)); transition: border-color var(--tr), transform var(--tr); cursor: default;
+    }
+    .tl-item:hover { border-color: var(--blue); transform: translateX(4px); }
+    .tl-dot {
+      position: absolute; left: -39px; top: 30px;
+      width: 14px; height: 14px; border-radius: 50%;
+      background: var(--blue); border: 3px solid var(--navy2); box-shadow: 0 0 12px var(--blue);
+    }
+    .tl-header { display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 8px; margin-bottom: 4px; }
+    .tl-role { font-family: 'Space Grotesk', sans-serif; font-weight: 600; font-size: 1.02rem; }
+    .tl-date {
+      font-size: 0.75rem; color: var(--cyan); font-weight: 500;
+      padding: 3px 10px; background: rgba(6,182,212,0.1); border: 1px solid rgba(6,182,212,0.2);
+      border-radius: 50px; white-space: nowrap;
+    }
+    .tl-company { font-size: 0.85rem; color: var(--blue); font-weight: 500; margin-bottom: 12px; }
+    .tl-bullets { padding-left: 0; list-style: none; }
+    .tl-bullets li {
+      font-size: 0.88rem; color: var(--muted); line-height: 1.75; margin-bottom: 6px;
+      padding-left: 16px; position: relative;
+    }
+    .tl-bullets li::before { content: '›'; position: absolute; left: 0; color: var(--blue); font-weight: 700; }
+    .tl-bullets li:last-child { margin-bottom: 0; }
+    .tl-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 14px; }
+    .tag {
+      font-size: 0.7rem; font-weight: 500; padding: 3px 9px; border-radius: 50px;
+      background: rgba(59,130,246,0.08); border: 1px solid rgba(59,130,246,0.2); color: var(--blue);
+    }
+    /* IBC sub-projects */
+    .ibc-projects { margin-top: 14px; display: flex; flex-direction: column; gap: 10px; }
+    .ibc-proj {
+      padding: 12px 16px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.07);
+      border-radius: 10px;
+    }
+    .ibc-proj-header { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 6px; margin-bottom: 4px; }
+    .ibc-proj-name { font-size: 0.82rem; font-weight: 600; color: var(--text); }
+    .ibc-proj-meta { font-size: 0.72rem; color: var(--cyan); }
+    .ibc-proj-desc { font-size: 0.82rem; color: var(--muted); line-height: 1.65; }
+
+    /* ── Projects ─────────────────────────────────────── */
+    #projects { background: var(--navy); }
+    .projects-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 22px; }
+    .proj-card {
+      padding: 26px; background: var(--glass); border: 1px solid var(--glass-border);
+      border-radius: var(--radius); backdrop-filter: blur(var(--blur));
+      transition: border-color var(--tr), transform var(--tr), box-shadow var(--tr);
+      cursor: default; display: flex; flex-direction: column;
+    }
+    .proj-card:hover { border-color: var(--blue); transform: translateY(-6px); box-shadow: 0 16px 48px rgba(59,130,246,0.12); }
+    .proj-icon {
+      width: 42px; height: 42px; border-radius: 11px;
+      display: flex; align-items: center; justify-content: center; margin-bottom: 18px; flex-shrink: 0;
+    }
+    .proj-icon svg { width: 20px; height: 20px; }
+    .i-blue   { background: rgba(59,130,246,0.14); color: var(--blue); }
+    .i-cyan   { background: rgba(6,182,212,0.14);  color: var(--cyan); }
+    .i-purple { background: rgba(139,92,246,0.14); color: var(--purple); }
+    .i-green  { background: rgba(34,197,94,0.14);  color: var(--green); }
+    .proj-status {
+      display: inline-flex; align-items: center; gap: 5px; font-size: 0.68rem; font-weight: 600;
+      padding: 2px 8px; border-radius: 50px; margin-bottom: 10px; width: fit-content;
+    }
+    .s-active { background: rgba(34,197,94,0.1); color: var(--green); border: 1px solid rgba(34,197,94,0.22); }
+    .s-done   { background: rgba(148,163,184,0.08); color: var(--muted); border: 1px solid rgba(148,163,184,0.18); }
+    .s-dot { width: 5px; height: 5px; border-radius: 50%; background: currentColor; }
+    .proj-title { font-family: 'Space Grotesk', sans-serif; font-size: 1.02rem; font-weight: 600; margin-bottom: 8px; }
+    .proj-desc { font-size: 0.86rem; color: var(--muted); line-height: 1.72; flex: 1; margin-bottom: 18px; }
+    .proj-stack { display: flex; flex-wrap: wrap; gap: 5px; }
+    .stack-tag {
+      font-size: 0.68rem; font-weight: 500; padding: 3px 8px; border-radius: 50px;
+      background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.09); color: var(--muted);
+    }
+
+    /* ── Skills ───────────────────────────────────────── */
+    #skills { background: var(--navy2); }
+    .skills-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 20px; }
+    .skill-group {
+      padding: 22px; background: var(--glass); border: 1px solid var(--glass-border);
+      border-radius: var(--radius); backdrop-filter: blur(var(--blur));
+      transition: border-color var(--tr);
+    }
+    .skill-group:hover { border-color: var(--blue); }
+    .skill-group-title {
+      font-family: 'Space Grotesk', sans-serif; font-size: 0.74rem; font-weight: 600;
+      letter-spacing: 0.08em; text-transform: uppercase; color: var(--cyan);
+      margin-bottom: 12px; display: flex; align-items: center; gap: 7px;
+    }
+    .skill-group-title svg { width: 13px; height: 13px; flex-shrink: 0; }
+    .skill-pills { display: flex; flex-wrap: wrap; gap: 7px; }
+    .pill {
+      font-size: 0.78rem; font-weight: 500; padding: 4px 12px; border-radius: 50px;
+      background: rgba(59,130,246,0.07); border: 1px solid rgba(59,130,246,0.16); color: var(--text);
+      transition: background var(--tr), border-color var(--tr); cursor: default;
+    }
+    .pill:hover { background: rgba(59,130,246,0.16); border-color: var(--blue); }
+
+    /* ── Contact ──────────────────────────────────────── */
+    #contact { background: var(--navy); text-align: center; }
+    .contact-card {
+      max-width: 600px; margin: 0 auto; padding: 48px;
+      background: var(--glass); border: 1px solid var(--glass-border);
+      border-radius: 24px; backdrop-filter: blur(var(--blur));
+    }
+    .contact-card .section-title { margin-bottom: 10px; }
+    .contact-card p { color: var(--muted); margin-bottom: 32px; line-height: 1.8; font-size: 0.93rem; }
+    .contact-links { display: flex; flex-direction: column; gap: 10px; }
+    .contact-link {
+      display: flex; align-items: center; gap: 12px; padding: 13px 18px;
+      background: rgba(255,255,255,0.04); border: 1px solid var(--glass-border);
+      border-radius: 12px; font-size: 0.88rem; font-weight: 500;
+      transition: background var(--tr), border-color var(--tr), transform var(--tr);
+      cursor: pointer; text-align: left;
+    }
+    .contact-link:hover { background: rgba(255,255,255,0.08); border-color: var(--blue); transform: translateX(4px); }
+    .contact-link svg { width: 17px; height: 17px; color: var(--cyan); flex-shrink: 0; }
+    .cl-meta { font-size: 0.75rem; color: var(--muted); margin-left: auto; white-space: nowrap; }
+
+    /* ── Footer ───────────────────────────────────────── */
+    footer {
+      text-align: center; padding: 28px 24px; color: var(--muted); font-size: 0.8rem;
+      border-top: 1px solid var(--glass-border);
+    }
+    footer strong { color: var(--text); }
+
+    /* ── Responsive ───────────────────────────────────── */
+    @media (max-width: 900px) {
+      .identity-grid { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 768px) {
+      .about-grid { grid-template-columns: 1fr; }
+      .about-stats { grid-template-columns: 1fr 1fr; }
+      .nav-links a:not(.nav-cta) { display: none; }
+      nav { width: calc(100vw - 32px); }
+      .contact-card { padding: 32px 20px; }
+      section { padding: 72px 20px; }
+    }
+    @media (max-width: 480px) {
+      .about-stats { grid-template-columns: 1fr; }
+      .hero-btns { flex-direction: column; align-items: center; }
+      .btn-primary, .btn-secondary { width: 100%; max-width: 280px; text-align: center; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+    }
+  </style>
+</head>
+<body>
+
+<div id="progress-bar" role="progressbar" aria-label="Scroll progress"></div>
+
+<!-- ── Nav ── -->
+<nav aria-label="Main navigation">
+  <span class="nav-logo">YF</span>
+  <div class="nav-links">
+    <a href="#identity" class="nav-link">About</a>
+    <a href="#experience" class="nav-link">Experience</a>
+    <a href="#projects" class="nav-link">Projects</a>
+    <a href="#skills" class="nav-link">Skills</a>
+    <a href="#contact" class="nav-link nav-cta">Contact</a>
+  </div>
+</nav>
+
+<!-- ── Hero ── -->
+<section id="hero" aria-label="Introduction">
+  <canvas id="hero-canvas" aria-hidden="true"></canvas>
+  <div class="glow glow-1" aria-hidden="true"></div>
+  <div class="glow glow-2" aria-hidden="true"></div>
+  <div class="hero-content">
+    <div class="hero-badge">
+      <span class="badge-dot" aria-hidden="true"></span>
+      Open to Full-Time Roles — December 2026
+    </div>
+    <h1 class="hero-name">Yongyang Fu</h1>
+    <div class="hero-zh" aria-label="Chinese name: 符勇阳">符勇阳</div>
+    <div class="hero-role" aria-live="polite">
+      <span id="typing-text"></span><span class="hero-cursor" aria-hidden="true"></span>
+    </div>
+    <p class="hero-sub">
+      UIUC Finance + Data Science student focused on <strong>Business Flow AI-ification</strong> — reconstructing enterprise processes with AI so complex work becomes systematically reproducible, not just automated.
+    </p>
+    <div class="hero-btns">
+      <a href="#identity" class="btn-primary">Learn About Me</a>
+      <a href="#contact" class="btn-secondary">Get in Touch</a>
+    </div>
+  </div>
+  <div class="hero-scroll" aria-hidden="true">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
+    Scroll
+  </div>
+</section>
+
+<!-- ── Identity — 4 Personal Summary Cards ── -->
+<section id="identity" aria-labelledby="identity-heading">
+  <div class="container">
+    <div class="section-label">Who I Am</div>
+    <div class="identity-intro fade-up">
+      <h2 class="section-title" id="identity-heading">Four Things That<br>Define How I Work</h2>
+      <p class="section-sub" style="margin-bottom:0">These aren't buzzwords — they're the actual principles that shape how I approach every project, internship, and tool I pick up.</p>
+    </div>
+    <div class="identity-grid" style="margin-top:40px">
+
+      <div class="id-card id-card-1 fade-up" style="transition-delay:0.05s">
+        <div class="id-num">01 &nbsp;·&nbsp; AI Practitioner</div>
+        <div class="id-title">Business Flow AI-ification</div>
+        <div class="id-desc">My long-term focus is <strong>systematically integrating AI into business workflows</strong> — not to replace labor, but to reconstruct and upgrade processes. AI should enable less-experienced people to accomplish work that previously required seasoned experts. Think upgrading from a restaurant that depends on one master chef's intuition to a <strong>modular, quality-guaranteed operation</strong>.</div>
+      </div>
+
+      <div class="id-card id-card-2 fade-up" style="transition-delay:0.12s">
+        <div class="id-num">02 &nbsp;·&nbsp; Tool Advocate</div>
+        <div class="id-title">Hands-On AI Tool User &amp; Advocate</div>
+        <div class="id-desc">I continuously track and personally test AI tools across five categories: <strong>information retrieval, data processing, content generation, workflow orchestration, and Agent-based execution</strong>. I evaluate tools on efficiency, stability, controllability, and scenario fit — and I help teammates adopt the right tools for their specific workflows, with the reasoning behind each choice.</div>
+      </div>
+
+      <div class="id-card id-card-3 fade-up" style="transition-delay:0.19s">
+        <div class="id-num">03 &nbsp;·&nbsp; Analyst</div>
+        <div class="id-title">Consulting &amp; Data Methodology Built Through Real Projects</div>
+        <div class="id-desc">My consulting and analytical skills were built through real client-facing work at IBC — progressing from data collection and cleaning → client communication and presentations → <strong>full ownership of scoring rule design, model building, and final deliverables</strong>. AI was embedded throughout: accelerating research, generating discussable framework drafts, and validating models.</div>
+      </div>
+
+      <div class="id-card id-card-4 fade-up" style="transition-delay:0.26s">
+        <div class="id-num">04 &nbsp;·&nbsp; Leader</div>
+        <div class="id-title">Organizer Who Thrives Working with People</div>
+        <div class="id-desc">Beyond technical skills, I invest in people-related capabilities. I founded and scaled student organizations from scratch — not just completing tasks, but <strong>building collaboration mechanisms, defining roles, and ensuring long-term sustainability</strong>. I'm comfortable leading teams, coordinating across stakeholders, and driving projects forward in complex environments.</div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ── About — Credentials ── -->
+<section id="about" aria-labelledby="about-heading">
+  <div class="container">
+    <div class="section-label">Background</div>
+    <div class="about-grid">
+      <div class="about-text fade-up">
+        <h2 class="section-title" id="about-heading">Education &amp;<br>Credentials</h2>
+        <p><strong>BS Finance + Data Science</strong> at UIUC Gies College of Business, GPA 3.83 (graduating December 2026). Based between Shenzhen, China and Champaign, IL.</p>
+        <p>Coursework spans Corporate Finance, Accounting, Computer Science, Data Curation, Economics, and AI Productivity Tools — built to sit at the intersection of quantitative rigor and business judgement.</p>
+        <p>Founded the <strong>UIUC Equity Research Association</strong> and progressed to <strong>Senior Consultant &amp; Shadow PM</strong> at Illinois Business Consulting. Currently leading the Hartford project at the <strong>Axis Risk Management Academy</strong> (AXIS Capital sponsored).</p>
+        <div class="about-targets">
+          <span class="target-badge">Product Operations</span>
+          <span class="target-badge">Business Analysis</span>
+          <span class="target-badge">Consulting</span>
+          <span class="target-badge">Financial Services</span>
+          <span class="target-badge">AI / Technology</span>
+        </div>
+      </div>
+      <div class="about-stats fade-up" style="transition-delay:0.15s">
+        <div class="stat-card">
+          <div class="stat-num">3.83</div>
+          <div class="stat-label">GPA · UIUC</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-num">4</div>
+          <div class="stat-label">Industry Internships</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-num">2</div>
+          <div class="stat-label">Orgs Founded / Led</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-num">114</div>
+          <div class="stat-label">TOEFL Score</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── Experience ── -->
+<section id="experience" aria-labelledby="exp-heading">
+  <div class="container">
+    <div class="section-label">Experience</div>
+    <h2 class="section-title" id="exp-heading">Professional Journey</h2>
+    <p class="section-sub">From fintech internships in Shenzhen to AI-driven consulting at UIUC — real projects, real clients, real deliverables.</p>
+    <div class="timeline">
+
+      <div class="tl-item fade-up">
+        <div class="tl-dot" aria-hidden="true"></div>
+        <div class="tl-header">
+          <div class="tl-role">Junior Analyst</div>
+          <div class="tl-date">Aug 2024 – Present</div>
+        </div>
+        <div class="tl-company">Axis Risk Management Academy (AXIS Capital) · Champaign, IL</div>
+        <ul class="tl-bullets">
+          <li>AXIS Capital-sponsored risk management and AI-in-finance research; one-on-one mentorship from investment and risk professionals</li>
+          <li>Team lead for The Hartford project — managed external communication, team coordination, and on-time delivery</li>
+          <li>Explored scenario-based AI applications in financial services; integrated AI tools to optimize research workflows</li>
+        </ul>
+        <div class="tl-tags">
+          <span class="tag">Risk Management</span><span class="tag">AI in Finance</span>
+          <span class="tag">Team Lead</span><span class="tag">AXIS Capital</span>
+        </div>
+      </div>
+
+      <div class="tl-item fade-up" style="transition-delay:0.08s">
+        <div class="tl-dot" aria-hidden="true"></div>
+        <div class="tl-header">
+          <div class="tl-role">Sell-Side Analyst Intern</div>
+          <div class="tl-date">May – Oct 2024</div>
+        </div>
+        <div class="tl-company">China Merchants Securities · Research Center, Shenzhen</div>
+        <ul class="tl-bullets">
+          <li>Covered third-party payments &amp; non-bank financial industries; synthesized news, regulatory policies, and company announcements into 30+ structured research outputs</li>
+          <li>Wrote and organized roadshow and internal meeting minutes; supported sell-side coverage report preparation</li>
+          <li>Conducted daily/weekly financial data tracking, cleaning, and analysis to support team strategy decisions</li>
+          <li>Applied AI tools throughout: Perplexity (retrieval), ChatGPT &amp; GitHub Copilot (processing), Canva (decks); proficient in Wind, iFinD, Choice financial terminals</li>
+        </ul>
+        <div class="tl-tags">
+          <span class="tag">Sell-Side Research</span><span class="tag">Wind / iFinD</span>
+          <span class="tag">Financial Analysis</span><span class="tag">30+ Outputs</span>
+        </div>
+      </div>
+
+      <div class="tl-item fade-up" style="transition-delay:0.16s">
+        <div class="tl-dot" aria-hidden="true"></div>
+        <div class="tl-header">
+          <div class="tl-role">Consultant → Senior Consultant → Shadow PM</div>
+          <div class="tl-date">Jan 2023 – Present</div>
+        </div>
+        <div class="tl-company">Illinois Business Consulting (IBC) · Champaign, IL</div>
+        <ul class="tl-bullets">
+          <li>Delivered 3 real paid client projects with increasing complexity — from research execution to full client communication and delivery lead</li>
+        </ul>
+        <div class="ibc-projects">
+          <div class="ibc-proj">
+            <div class="ibc-proj-header">
+              <span class="ibc-proj-name">AmFam Insurance (American Family Insurance)</span>
+              <span class="ibc-proj-meta">$25,000 · Jan–Jun 2023 · Consultant</span>
+            </div>
+            <div class="ibc-proj-desc">Synthesized fragmented market information into structured insights; built customer personas. Client returned the following semester to commission a follow-up project with a new IBC team.</div>
+          </div>
+          <div class="ibc-proj">
+            <div class="ibc-proj-header">
+              <span class="ibc-proj-name">Marmon Holdings (Berkshire Hathaway subsidiary)</span>
+              <span class="ibc-proj-meta">$25,000 · Aug 2023–Apr 2024 · Senior Consultant + Shadow PM</span>
+            </div>
+            <div class="ibc-proj-desc">Built multi-scenario cost models; translated engineering parameters into financial inputs. First client-facing delivery experience. Deliverables adopted as the reference standard for subsequent equipment consulting.</div>
+          </div>
+          <div class="ibc-proj">
+            <div class="ibc-proj-header">
+              <span class="ibc-proj-name">State of Illinois — Cannabis Industry</span>
+              <span class="ibc-proj-meta">$7,500 · Jan–Nov 2024 · Senior Consultant</span>
+            </div>
+            <div class="ibc-proj-desc">Upgraded qualitative white paper into a quantifiable scoring system using SQL, Python, and ML validation. Led client communication and final delivery. Directly adopted to update a state government cannabis data framework.</div>
+          </div>
+        </div>
+        <div class="tl-tags">
+          <span class="tag">Python &amp; SQL</span><span class="tag">Financial Modeling</span>
+          <span class="tag">Machine Learning</span><span class="tag">Tableau</span><span class="tag">Cursor</span>
+        </div>
+      </div>
+
+      <div class="tl-item fade-up" style="transition-delay:0.24s">
+        <div class="tl-dot" aria-hidden="true"></div>
+        <div class="tl-header">
+          <div class="tl-role">Financial Product Management Intern</div>
+          <div class="tl-date">Jun – Aug 2023</div>
+        </div>
+        <div class="tl-company">WeBank (Shenzhen Qianhai WeBank) · Shenzhen</div>
+        <ul class="tl-bullets">
+          <li>Supported financial product management, asset management analysis, and macro research; compiled weekly product analysis reports and meeting minutes</li>
+          <li>Built corporate architecture and product framework models; analyzed macro policy impacts on financial firm valuations</li>
+          <li>Proposed cross-department process optimization recommendations — some adopted and implemented</li>
+        </ul>
+        <div class="tl-tags">
+          <span class="tag">Product Management</span><span class="tag">Macro Research</span>
+          <span class="tag">Process Optimization</span><span class="tag">Excel Modeling</span>
+        </div>
+      </div>
+
+      <div class="tl-item fade-up" style="transition-delay:0.32s">
+        <div class="tl-dot" aria-hidden="true"></div>
+        <div class="tl-header">
+          <div class="tl-role">Summer Intern — Product &amp; Marketing</div>
+          <div class="tl-date">Apr – Jun 2022</div>
+        </div>
+        <div class="tl-company">Huion (Shenzhen Huiwang Animation Technology) · Shenzhen</div>
+        <ul class="tl-bullets">
+          <li>Assisted product managers with industry research and competitive analysis; co-wrote BRD and PRD documents to support product iteration</li>
+          <li>Participated in 4 product translation and localization projects — text translation, proofreading, and localization adaptation</li>
+        </ul>
+        <div class="tl-tags">
+          <span class="tag">Product Research</span><span class="tag">BRD / PRD</span>
+          <span class="tag">Localization</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ── Projects ── -->
+<section id="projects" aria-labelledby="proj-heading">
+  <div class="container">
+    <div class="section-label">Projects</div>
+    <h2 class="section-title" id="proj-heading">What I'm Building</h2>
+    <p class="section-sub">Minimal, delivery-oriented iterations — each project starts from a real problem, builds an MVP, and scales from real usage feedback.</p>
+    <div class="projects-grid">
+
+      <div class="proj-card fade-up">
+        <div class="proj-icon i-blue">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M4.93 4.93a10 10 0 0 0 0 14.14"/><path d="M17.66 7.34a6 6 0 0 1 0 9.32M6.34 7.34a6 6 0 0 0 0 9.32"/></svg>
+        </div>
+        <div class="proj-status s-active"><span class="s-dot"></span> Active</div>
+        <div class="proj-title">AI Job Application Agent</div>
+        <p class="proj-desc">End-to-end multi-agent system: Profile Agent (personal corpus embedding) → Crawler Agent (job posting normalization) → Matcher Agent (semantic scoring) → Apply Agent (tailored materials + form automation). Phase 1 architecture complete.</p>
+        <div class="proj-stack">
+          <span class="stack-tag">Python</span><span class="stack-tag">LangChain</span>
+          <span class="stack-tag">CrewAI</span><span class="stack-tag">Vector DB</span><span class="stack-tag">Playwright</span>
+        </div>
+      </div>
+
+      <div class="proj-card fade-up" style="transition-delay:0.08s">
+        <div class="proj-icon i-purple">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+        </div>
+        <div class="proj-status s-active"><span class="s-dot"></span> Active</div>
+        <div class="proj-title">Personalized Agent Skill Fleet</div>
+        <p class="proj-desc">Custom Claude-powered PPTX generator agents for IBC and ERA — each with curated domain reference libraries encoding org style, structure, and standards. Dramatically reduces time from project notes to presentable draft.</p>
+        <div class="proj-stack">
+          <span class="stack-tag">Claude API</span><span class="stack-tag">Prompt Engineering</span>
+          <span class="stack-tag">Reference Libraries</span>
+        </div>
+      </div>
+
+      <div class="proj-card fade-up" style="transition-delay:0.16s">
+        <div class="proj-icon i-cyan">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+        </div>
+        <div class="proj-status s-active"><span class="s-dot"></span> Active</div>
+        <div class="proj-title">Coze Workflow Automation</div>
+        <p class="proj-desc">Modular job role web-crawl component on Coze — autonomously retrieves and structures job descriptions, fit context, and culture signals. Composable building block feeding downstream resume and cover letter agents.</p>
+        <div class="proj-stack">
+          <span class="stack-tag">Coze</span><span class="stack-tag">LLM Extraction</span>
+          <span class="stack-tag">Web Crawl APIs</span>
+        </div>
+      </div>
+
+      <div class="proj-card fade-up" style="transition-delay:0.24s">
+        <div class="proj-icon i-green">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 20V10"/><path d="M12 20V4"/><path d="M6 20v-6"/></svg>
+        </div>
+        <div class="proj-status s-done"><span class="s-dot"></span> Completed</div>
+        <div class="proj-title">European Soccer Analytics Pipeline</div>
+        <p class="proj-desc">Reproducible 6-phase pipeline: 32 years, 57,865 matches, 5 leagues. 58.9% match-outcome accuracy — 78% above random baseline. Automated via single bash command with SHA-256 data integrity verification.</p>
+        <div class="proj-stack">
+          <span class="stack-tag">Python</span><span class="stack-tag">scikit-learn</span>
+          <span class="stack-tag">SQL</span><span class="stack-tag">Pandas</span><span class="stack-tag">Bash</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ── Skills ── -->
+<section id="skills" aria-labelledby="skills-heading">
+  <div class="container">
+    <div class="section-label">Skills</div>
+    <h2 class="section-title" id="skills-heading">Toolkit</h2>
+    <p class="section-sub">Spanning quantitative programming, AI engineering, financial analysis, and cross-functional consulting delivery.</p>
+    <div class="skills-grid">
+
+      <div class="skill-group fade-up">
+        <div class="skill-group-title">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+          Programming &amp; Data
+        </div>
+        <div class="skill-pills">
+          <span class="pill">Python</span><span class="pill">SQL</span><span class="pill">R</span>
+          <span class="pill">Pandas</span><span class="pill">Bash</span>
+        </div>
+      </div>
+
+      <div class="skill-group fade-up" style="transition-delay:0.07s">
+        <div class="skill-group-title">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M4.93 4.93a10 10 0 0 0 0 14.14"/></svg>
+          AI &amp; ML
+        </div>
+        <div class="skill-pills">
+          <span class="pill">scikit-learn</span><span class="pill">LangChain</span>
+          <span class="pill">Claude API</span><span class="pill">GPT API</span>
+          <span class="pill">Gemini</span><span class="pill">Coze</span><span class="pill">Cursor</span>
+        </div>
+      </div>
+
+      <div class="skill-group fade-up" style="transition-delay:0.14s">
+        <div class="skill-group-title">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+          Visualization
+        </div>
+        <div class="skill-pills">
+          <span class="pill">Tableau</span><span class="pill">Excel (Advanced)</span>
+          <span class="pill">Matplotlib</span><span class="pill">Seaborn</span>
+        </div>
+      </div>
+
+      <div class="skill-group fade-up" style="transition-delay:0.21s">
+        <div class="skill-group-title">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+          Finance Tools
+        </div>
+        <div class="skill-pills">
+          <span class="pill">Wind</span><span class="pill">iFinD</span><span class="pill">Choice</span>
+          <span class="pill">Financial Modeling</span><span class="pill">Equity Research</span>
+        </div>
+      </div>
+
+      <div class="skill-group fade-up" style="transition-delay:0.28s">
+        <div class="skill-group-title">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+          Consulting
+        </div>
+        <div class="skill-pills">
+          <span class="pill">Deliverable Design</span><span class="pill">Secondary Research</span>
+          <span class="pill">Client Communication</span><span class="pill">Canva</span><span class="pill">Gamma</span>
+        </div>
+      </div>
+
+      <div class="skill-group fade-up" style="transition-delay:0.35s">
+        <div class="skill-group-title">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+          Languages
+        </div>
+        <div class="skill-pills">
+          <span class="pill">English — Fluent (TOEFL 114)</span>
+          <span class="pill">Mandarin — Native</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ── Contact ── -->
+<section id="contact" aria-labelledby="contact-heading">
+  <div class="container">
+    <div class="contact-card fade-up">
+      <div class="section-label" style="justify-content:center;margin-bottom:10px">Contact</div>
+      <h2 class="section-title" id="contact-heading">Let's Connect</h2>
+      <p>Open to full-time roles starting December 2026 in financial services, technology, and consulting — and internship opportunities available now. Based in Shenzhen / Champaign.</p>
+      <div class="contact-links">
+        <a href="mailto:Yongyangfu2003@gmail.com" class="contact-link">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+          Yongyangfu2003@gmail.com
+          <span class="cl-meta">Gmail</span>
+        </a>
+        <a href="mailto:yf14@illinois.edu" class="contact-link">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+          yf14@illinois.edu
+          <span class="cl-meta">University Email</span>
+        </a>
+        <a href="https://orcid.org/0009-0009-6222-4732" target="_blank" rel="noopener noreferrer" class="contact-link">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          ORCID: 0009-0009-6222-4732
+          <span class="cl-meta">Research ID</span>
+        </a>
+        <div class="contact-link" style="cursor:default">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+          University of Illinois Urbana-Champaign
+          <span class="cl-meta">Gies College of Business</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p><strong>Yongyang Fu</strong> &nbsp;·&nbsp; Finance × Data Science × AI Engineering &nbsp;·&nbsp; UIUC Dec 2026</p>
+</footer>
+
+<script>
+  /* ── Progress Bar ── */
+  const bar = document.getElementById('progress-bar');
+  window.addEventListener('scroll', () => {
+    const h = document.documentElement.scrollHeight - window.innerHeight;
+    bar.style.width = (h > 0 ? (window.scrollY / h) * 100 : 0) + '%';
+  }, { passive: true });
+
+  /* ── Active Nav ── */
+  const navLinks = document.querySelectorAll('.nav-link');
+  document.querySelectorAll('section[id]').forEach(s => {
+    new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          navLinks.forEach(l => l.classList.remove('active'));
+          const a = document.querySelector(`.nav-link[href="#${e.target.id}"]`);
+          if (a) a.classList.add('active');
+        }
+      });
+    }, { rootMargin: '-40% 0px -55% 0px' }).observe(s);
+  });
+
+  /* ── Fade-up ── */
+  const fo = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); fo.unobserve(e.target); } });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.fade-up').forEach(el => fo.observe(el));
+
+  /* ── Typing ── */
+  const phrases = [
+    'Finance × Data Science × AI',
+    'Business Flow AI-ification',
+    'Building Multi-Agent Systems',
+    'Senior Consultant · Shadow PM',
+  ];
+  let pi = 0, ci = 0, del = false;
+  const typEl = document.getElementById('typing-text');
+  function type() {
+    const cur = phrases[pi];
+    typEl.textContent = del ? cur.slice(0, --ci) : cur.slice(0, ++ci);
+    if (!del && ci === cur.length) { del = true; setTimeout(type, 2000); return; }
+    if (del && ci === 0) { del = false; pi = (pi + 1) % phrases.length; setTimeout(type, 380); return; }
+    setTimeout(type, del ? 38 : 68);
+  }
+  type();
+
+  /* ── Particle Canvas ── */
+  const canvas = document.getElementById('hero-canvas');
+  const ctx = canvas.getContext('2d');
+  let W, H, pts = [];
+  function resize() { W = canvas.width = canvas.offsetWidth; H = canvas.height = canvas.offsetHeight; }
+  class Pt {
+    constructor() {
+      this.x = Math.random() * (W || 1200);
+      this.y = Math.random() * (H || 800);
+      this.r = Math.random() * 1.4 + 0.3;
+      this.vy = Math.random() * 0.28 + 0.08;
+      this.vx = (Math.random() - 0.5) * 0.18;
+      this.a = Math.random() * 0.45 + 0.08;
+    }
+    tick() {
+      this.y -= this.vy; this.x += this.vx;
+      if (this.y < -10) { this.x = Math.random() * W; this.y = H + 10; }
+    }
+    draw() {
+      ctx.beginPath(); ctx.arc(this.x, this.y, this.r, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(59,130,246,${this.a})`; ctx.fill();
+    }
+  }
+  function frame() {
+    ctx.clearRect(0, 0, W, H);
+    ctx.strokeStyle = 'rgba(59,130,246,0.035)'; ctx.lineWidth = 1;
+    const g = 64;
+    for (let x = 0; x < W; x += g) { ctx.beginPath(); ctx.moveTo(x,0); ctx.lineTo(x,H); ctx.stroke(); }
+    for (let y = 0; y < H; y += g) { ctx.beginPath(); ctx.moveTo(0,y); ctx.lineTo(W,y); ctx.stroke(); }
+    pts.forEach(p => { p.tick(); p.draw(); });
+    requestAnimationFrame(frame);
+  }
+  resize();
+  pts = Array.from({ length: 90 }, () => new Pt());
+  frame();
+  window.addEventListener('resize', resize, { passive: true });
+</script>
+</body>
+</html>
