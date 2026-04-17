@@ -40,7 +40,6 @@
     /* ── Language switching ───────────────────────── */
     .lang-zh { display: none; }
     .lang-en { display: block; }
-    /* For inline elements */
     span.lang-zh { display: none; }
     span.lang-en { display: inline; }
 
@@ -62,7 +61,7 @@
       backdrop-filter: blur(var(--blur)); -webkit-backdrop-filter: blur(var(--blur));
       border: 1px solid var(--glass-border);
       border-radius: 50px;
-      width: min(860px, calc(100vw - 32px));
+      width: min(920px, calc(100vw - 32px));
     }
     .nav-logo {
       font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 0.9rem;
@@ -310,9 +309,48 @@
     .proj-desc { font-size: 0.86rem; color: var(--muted); line-height: 1.72; flex: 1; margin-bottom: 18px; }
     .proj-stack { display: flex; flex-wrap: wrap; gap: 5px; }
     .stack-tag { font-size: 0.68rem; font-weight: 500; padding: 3px 8px; border-radius: 50px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.09); color: var(--muted); }
+    .proj-github {
+      display: inline-flex; align-items: center; gap: 6px;
+      margin-top: 12px; font-size: 0.74rem; font-weight: 500;
+      color: var(--muted); padding: 5px 12px; border-radius: 50px;
+      border: 1px solid var(--glass-border); background: transparent;
+      transition: color var(--tr), border-color var(--tr);
+      cursor: pointer; width: fit-content;
+    }
+    .proj-github:hover { color: var(--cyan); border-color: var(--cyan); }
+    .proj-github svg { width: 13px; height: 13px; flex-shrink: 0; }
+
+    /* ── Gaming ──────────────────────────────────── */
+    #gaming { background: var(--navy2); }
+    .gaming-stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-bottom: 44px; }
+    .gaming-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+    .gaming-card {
+      padding: 28px; background: var(--glass); border: 1px solid var(--glass-border);
+      border-radius: var(--radius); backdrop-filter: blur(var(--blur));
+      transition: border-color var(--tr), transform var(--tr);
+    }
+    .gaming-card:hover { border-color: var(--blue); transform: translateY(-4px); }
+    .gaming-card-header {
+      font-family: 'Space Grotesk', 'Noto Sans SC', sans-serif;
+      font-size: 0.95rem; font-weight: 700; margin-bottom: 18px;
+      color: var(--cyan); letter-spacing: 0.04em; text-transform: uppercase; font-size: 0.74rem;
+    }
+    .game-list { list-style: none; padding: 0; }
+    .game-list li {
+      font-size: 0.84rem; color: var(--muted); padding: 7px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+      display: flex; justify-content: space-between; align-items: center; gap: 8px;
+    }
+    .game-list li:last-child { border-bottom: none; }
+    .game-name { flex: 1; }
+    .game-hours { font-size: 0.74rem; color: var(--blue); font-weight: 600; white-space: nowrap; }
+    .gaming-note { font-size: 0.8rem; color: var(--muted); margin-top: 14px; line-height: 1.7; }
+    .gaming-lolm-stats { display: flex; flex-direction: column; gap: 12px; }
+    .gaming-lolm-stat { font-size: 0.84rem; color: var(--muted); line-height: 1.65; }
+    .gaming-lolm-stat strong { color: var(--text); display: block; font-size: 0.74rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--cyan); margin-bottom: 2px; }
 
     /* ── Skills ──────────────────────────────────── */
-    #skills { background: var(--navy2); }
+    #skills { background: var(--navy); }
     .skills-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 20px; }
     .skill-group { padding: 22px; background: var(--glass); border: 1px solid var(--glass-border); border-radius: var(--radius); backdrop-filter: blur(var(--blur)); transition: border-color var(--tr); }
     .skill-group:hover { border-color: var(--blue); }
@@ -323,7 +361,7 @@
     .pill:hover { background: rgba(59,130,246,0.16); border-color: var(--blue); }
 
     /* ── Contact ─────────────────────────────────── */
-    #contact { background: var(--navy); text-align: center; }
+    #contact { background: var(--navy2); text-align: center; }
     .contact-card { max-width: 600px; margin: 0 auto; padding: 48px; background: var(--glass); border: 1px solid var(--glass-border); border-radius: 24px; backdrop-filter: blur(var(--blur)); }
     .contact-card p { color: var(--muted); margin-bottom: 32px; line-height: 1.8; font-size: 0.93rem; }
     .contact-links { display: flex; flex-direction: column; gap: 10px; }
@@ -345,6 +383,8 @@
       nav { width: calc(100vw - 32px); }
       .contact-card { padding: 32px 20px; }
       section { padding: 72px 20px; }
+      .gaming-stats { grid-template-columns: 1fr 1fr; }
+      .gaming-grid { grid-template-columns: 1fr; }
     }
     @media (max-width: 480px) {
       .about-stats { grid-template-columns: 1fr; }
@@ -367,6 +407,7 @@
     <a href="#identity" class="nav-link" data-en="About" data-zh="关于我">About</a>
     <a href="#experience" class="nav-link" data-en="Experience" data-zh="经历">Experience</a>
     <a href="#projects" class="nav-link" data-en="Projects" data-zh="项目">Projects</a>
+    <a href="#gaming" class="nav-link" data-en="Gaming" data-zh="游戏">Gaming</a>
     <a href="#skills" class="nav-link" data-en="Skills" data-zh="技能">Skills</a>
     <a href="#contact" class="nav-link nav-cta" data-en="Contact" data-zh="联系我">Contact</a>
   </div>
@@ -495,12 +536,12 @@
         <div class="lang-en">
           <p><strong>BS Finance + Data Science</strong> at UIUC Gies College of Business, GPA 3.83 (graduating December 2026). Based between Shenzhen, China and Champaign, IL.</p>
           <p>Coursework spans Corporate Finance, Accounting, Computer Science, Data Curation, Economics, and AI Productivity Tools — built to sit at the intersection of quantitative rigor and business judgement.</p>
-          <p>Founded the <strong>UIUC Equity Research Association</strong> (concluded Jan 2026) and progressed to <strong>Core Consulting Team Member</strong> at Illinois Business Consulting (concluded Nov 2024). Previously led The Hartford project as group lead at the <strong>Axis Risk Management Academy</strong> (AXIS Capital, Aug 2024 – Aug 2025).</p>
+          <p>Founded the <strong>UIUC Equity Research Association</strong> and progressed to <strong>Deputy Project Manager</strong> at Illinois Business Consulting (concluded Nov 2024). Currently active at the <strong>Axis Risk Management Academy</strong> (AXIS Capital, Aug 2024 – Present).</p>
         </div>
         <div class="lang-zh">
           <p><strong>金融学 + 数据科学 学士</strong>，伊利诺伊大学厄巴纳-香槟分校吉斯商学院，GPA 3.83（预计2026年12月毕业）。常驻深圳与美国香槟之间。</p>
           <p>主修课程涵盖公司金融、会计学、计算机科学、数据整理、经济学与AI生产力工具——致力于在量化严谨性与商业判断力之间找到交汇点。</p>
-          <p>创立<strong>UIUC股权研究协会（ERA）</strong>（2026年1月结束），在伊利诺伊商业咨询（IBC）成长为<strong>咨询小组核心成员</strong>（2024年11月结束）。曾参与<strong>Axis风险管理学院</strong>项目并担任小组组长（AXIS Capital赞助，2024年8月—2025年8月）。</p>
+          <p>创立<strong>UIUC股权研究协会（ERA）</strong>，在伊利诺伊商业咨询（IBC）成长为<strong>咨询副项目经理</strong>（2024年11月结束）。目前参与<strong>Axis风险管理学院</strong>项目（AXIS Capital赞助，2024年8月至今）。</p>
         </div>
         <div class="about-targets">
           <span class="target-badge lang-en">Product Operations</span>
@@ -559,7 +600,7 @@
             <span class="lang-en">Junior Analyst</span>
             <span class="lang-zh">Junior Analyst · 初级分析师</span>
           </div>
-          <div class="tl-date"><span class="lang-en">2024.08 – 2025.08</span><span class="lang-zh">2024年8月—2025年8月</span></div>
+          <div class="tl-date"><span class="lang-en">2024.08 – Present</span><span class="lang-zh">2024年8月—至今</span></div>
         </div>
         <div class="tl-company">
           <span class="lang-en">Axis Risk Management Academy (AXIS Capital) · Champaign, IL</span>
@@ -614,8 +655,8 @@
         <div class="tl-dot" aria-hidden="true"></div>
         <div class="tl-header">
           <div class="tl-role">
-            <span class="lang-en">Consultant → Core Consulting Team Member</span>
-            <span class="lang-zh">咨询顾问 → 咨询小组核心成员</span>
+            <span class="lang-en">Consultant → Deputy Project Manager</span>
+            <span class="lang-zh">咨询顾问 → 咨询副项目经理</span>
           </div>
           <div class="tl-date"><span class="lang-en">2023.01 – 2024.11</span><span class="lang-zh">2023年1月—2024年11月</span></div>
         </div>
@@ -703,14 +744,14 @@
           <div class="tl-date"><span class="lang-en">2022.04 – 2022.06</span><span class="lang-zh">2022年4月—2022年6月</span></div>
         </div>
         <div class="tl-company">
-          <span class="lang-en">Huion (Shenzhen Huiwang Animation Technology) · Shenzhen</span>
-          <span class="lang-zh">深圳市绘王动漫科技有限公司 · 中国·深圳</span>
+          <span class="lang-en">Huion (Shenzhen Huiwang Trend Technology) · Shenzhen</span>
+          <span class="lang-zh">深圳绘王趋势科技股份有限公司 · 中国·深圳</span>
         </div>
         <ul class="tl-bullets">
           <li class="lang-en">Assisted product managers with industry research and competitive analysis; co-wrote BRD and PRD documents to support product iteration</li>
           <li class="lang-en">Participated in 4 product translation and localization projects — text translation, proofreading, and localization adaptation</li>
-          <li class="lang-zh">协助产品经理开展行业调研与竞品分析，参与撰写商业需求文档（BRD）与产品需求文档（PRD）</li>
-          <li class="lang-zh">参与4项产品翻译与本地化项目，完成文本翻译、校对及本地化适配工作，提升产品海外适配性</li>
+          <li class="lang-zh">协助产品经理开展行业调研与竞品分析，参与撰写商业需求文档（BRD）与产品需求文档（PRD），支撑产品迭代优化</li>
+          <li class="lang-zh">参与4项产品翻译与本地化项目，负责文本翻译、校对及本地化适配，推动项目按期交付，提升产品海外市场适配性</li>
         </ul>
         <div class="tl-tags">
           <span class="tag lang-en">Product Research</span><span class="tag lang-en">BRD / PRD</span><span class="tag lang-en">Localization</span>
@@ -771,6 +812,10 @@
         <div class="proj-stack">
           <span class="stack-tag">Claude API</span><span class="stack-tag"><span class="lang-en">Prompt Engineering</span><span class="lang-zh">提示词工程</span></span>
         </div>
+        <a href="https://github.com/YongyangFu/agent-skill-library" target="_blank" rel="noopener noreferrer" class="proj-github">
+          <svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
+          <span class="lang-en">View on GitHub</span><span class="lang-zh">查看源码</span>
+        </a>
       </div>
 
       <div class="proj-card fade-up" style="transition-delay:0.16s">
@@ -808,6 +853,10 @@
           <span class="stack-tag">Python</span><span class="stack-tag">scikit-learn</span>
           <span class="stack-tag">SQL</span><span class="stack-tag">Pandas</span><span class="stack-tag">Bash</span>
         </div>
+        <a href="https://github.com/YongyangFu/EU-soccer_data-pipeline" target="_blank" rel="noopener noreferrer" class="proj-github">
+          <svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
+          <span class="lang-en">View on GitHub</span><span class="lang-zh">查看源码</span>
+        </a>
       </div>
 
       <div class="proj-card fade-up" style="transition-delay:0.32s">
@@ -827,6 +876,117 @@
           <span class="stack-tag">Python</span><span class="stack-tag">Claude API</span>
           <span class="stack-tag">SQLCipher</span><span class="stack-tag">Streamlit</span><span class="stack-tag">SQLite</span>
         </div>
+        <a href="https://github.com/YongyangFu/whatsup-agent" target="_blank" rel="noopener noreferrer" class="proj-github">
+          <svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
+          <span class="lang-en">View on GitHub</span><span class="lang-zh">查看源码</span>
+        </a>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ── Gaming ── -->
+<section id="gaming" aria-labelledby="gaming-heading">
+  <div class="container">
+    <div class="section-label" data-en="05" data-zh="五">05</div>
+    <h2 class="section-title" id="gaming-heading">
+      <span class="lang-en">Gaming Profile</span>
+      <span class="lang-zh">游戏经历</span>
+    </h2>
+    <p class="section-sub">
+      <span class="lang-en">A data-driven player who treats the meta like a research problem — 6,400+ Steam hours deep in grand strategy and 4X, plus a Grandmaster-peak LOLM competitor on the NA server who built a multi-account system to track competitive mechanics across rank brackets.</span>
+      <span class="lang-zh">把 Meta 当研究课题来对待——Steam 策略与 4X 品类 6,400+ 小时深耕，同时在 LOLM 北美服维护 8 个账号构建跨段位版本 meta 研究体系，B 站策略内容近 5 万播放。</span>
+    </p>
+
+    <!-- Stats row -->
+    <div class="gaming-stats fade-up">
+      <div class="stat-card">
+        <div class="stat-num">6,400+</div>
+        <div class="stat-label" data-en="Steam Hours" data-zh="Steam 时长">Steam Hours</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num">84%</div>
+        <div class="stat-label" data-en="Strategy &amp; 4X" data-zh="策略/4X品类占比">Strategy &amp; 4X</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num" style="font-size:clamp(1rem,2vw,1.5rem)">
+          <span class="lang-en">Grandmaster</span>
+          <span class="lang-zh">至尊王者</span>
+        </div>
+        <div class="stat-label" data-en="LOLM NA Peak Rank" data-zh="LOLM 北美服峰值段位">LOLM NA Peak Rank</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num">49,893</div>
+        <div class="stat-label" data-en="Bilibili Views" data-zh="B 站播放量">Bilibili Views</div>
+      </div>
+    </div>
+
+    <!-- Two cards -->
+    <div class="gaming-grid">
+
+      <!-- 4X / Strategy -->
+      <div class="gaming-card fade-up">
+        <div class="gaming-card-header">
+          <span class="lang-en">Grand Strategy &amp; 4X</span>
+          <span class="lang-zh">大战略与 4X</span>
+        </div>
+        <ul class="game-list">
+          <li>
+            <span class="game-name"><span class="lang-en">Sid Meier's Civilization VI</span><span class="lang-zh">文明 VI（Civ 6）</span></span>
+            <span class="game-hours">2,309 h</span>
+          </li>
+          <li>
+            <span class="game-name"><span class="lang-en">Total War Series</span><span class="lang-zh">全面战争系列</span></span>
+            <span class="game-hours">806 h</span>
+          </li>
+          <li>
+            <span class="game-name"><span class="lang-en">Paradox Series (EU5 · HOI4 · CK3 · Stellaris)</span><span class="lang-zh">Paradox 系列（EU5 · HOI4 · CK3 · 群星）</span></span>
+            <span class="game-hours">756 h</span>
+          </li>
+          <li>
+            <span class="game-name"><span class="lang-en">Victoria 3</span><span class="lang-zh">维多利亚 3</span></span>
+            <span class="game-hours">361 h</span>
+          </li>
+          <li>
+            <span class="game-name"><span class="lang-en">Age of Empires IV</span><span class="lang-zh">帝国时代 IV</span></span>
+            <span class="game-hours">314 h</span>
+          </li>
+        </ul>
+        <p class="gaming-note">
+          <span class="lang-en">Civ VI active since its 2016 launch — last played yesterday. ~1,300h in PvP multiplayer with systematic post-match replay analysis to extract reusable strategic frameworks.</span>
+          <span class="lang-zh">文明 VI 自 2016 年发售至今持续活跃，昨天仍在游玩。约 1,300 小时多人竞技对局，系统性录像复盘提炼可复用策略框架。</span>
+        </p>
+      </div>
+
+      <!-- LOLM -->
+      <div class="gaming-card fade-up" style="transition-delay:0.1s">
+        <div class="gaming-card-header">
+          <span class="lang-en">LOLM — Competitive Research System</span>
+          <span class="lang-zh">LOLM — 竞技研究体系</span>
+        </div>
+        <div class="gaming-lolm-stats">
+          <div class="gaming-lolm-stat">
+            <strong><span class="lang-en">Cross-server track record</span><span class="lang-zh">跨服经历</span></strong>
+            <span class="lang-en">JP → CN → NA (since high school, 5+ years)</span>
+            <span class="lang-zh">日服 → 国服 → 北美服（高中至今，5年+）</span>
+          </div>
+          <div class="gaming-lolm-stat">
+            <strong><span class="lang-en">Multi-account research system</span><span class="lang-zh">多账号研究体系</span></strong>
+            <span class="lang-en">8 NA accounts (Emerald → Grandmaster) · ~1,000 research matches spanning rank brackets for cross-tier meta analysis</span>
+            <span class="lang-zh">北美服 8 个账号（翡翠至至尊王者）· 约 1,000 把研究对局，构建跨段位版本 meta 观测系统</span>
+          </div>
+          <div class="gaming-lolm-stat">
+            <strong><span class="lang-en">Key finding</span><span class="lang-zh">关键研究发现</span></strong>
+            <span class="lang-en">Identified support S-score weight bias — built a behavior optimization framework and climbed Diamond → Grandmaster in 200 matches at 60% win rate</span>
+            <span class="lang-zh">发现辅助位 S 评分权重偏差，开发针对性行为优化框架，200 把以 60% 胜率从钻石爬至至尊王者</span>
+          </div>
+          <div class="gaming-lolm-stat">
+            <strong><span class="lang-en">Bilibili strategy content</span><span class="lang-zh">B 站策略内容（北美的小安）</span></strong>
+            <span class="lang-en">49,893 views · 233 saves · 311 comments — strategy hypotheses validated through a publish → feedback → iterate loop</span>
+            <span class="lang-zh">49,893 播放 · 233 收藏 · 311 评论 — 策略框架通过「发布 → 用户反馈 → 迭代」闭环完成验证</span>
+          </div>
+        </div>
       </div>
 
     </div>
@@ -836,7 +996,7 @@
 <!-- ── Skills ── -->
 <section id="skills" aria-labelledby="skills-heading">
   <div class="container">
-    <div class="section-label" data-en="05" data-zh="五">05</div>
+    <div class="section-label" data-en="06" data-zh="六">06</div>
     <h2 class="section-title" id="skills-heading">
       <span class="lang-en">Toolkit</span>
       <span class="lang-zh">技能工具箱</span>
@@ -923,7 +1083,7 @@
 <section id="contact" aria-labelledby="contact-heading">
   <div class="container">
     <div class="contact-card fade-up">
-      <div class="section-label" style="justify-content:center;margin-bottom:10px" data-en="06" data-zh="六">06</div>
+      <div class="section-label" style="justify-content:center;margin-bottom:10px" data-en="07" data-zh="七">07</div>
       <h2 class="section-title" id="contact-heading">
         <span class="lang-en">Let's Connect</span>
         <span class="lang-zh">欢迎联系我</span>
@@ -984,7 +1144,6 @@
     localStorage.setItem('lang', lang);
     document.documentElement.lang = lang === 'zh' ? 'zh-CN' : 'en';
 
-    // Show/hide block-level lang elements
     document.querySelectorAll('.lang-en').forEach(el => {
       el.style.display = lang === 'en' ? (el.tagName === 'SPAN' ? 'inline' : 'block') : 'none';
     });
@@ -992,24 +1151,20 @@
       el.style.display = lang === 'zh' ? (el.tagName === 'SPAN' ? 'inline' : 'block') : 'none';
     });
 
-    // Update data-en / data-zh text elements
     document.querySelectorAll('[data-en]').forEach(el => {
       el.innerHTML = lang === 'zh' ? el.dataset.zh : el.dataset.en;
     });
 
-    // Toggle button states
     document.getElementById('btn-en').classList.toggle('active', lang === 'en');
     document.getElementById('btn-zh').classList.toggle('active', lang === 'zh');
     document.getElementById('btn-en').setAttribute('aria-pressed', lang === 'en');
     document.getElementById('btn-zh').setAttribute('aria-pressed', lang === 'zh');
 
-    // Reset typing animation to new language phrases
     typingPhrases = PHRASES[lang];
     pi = 0; ci = 0; del = false;
     document.getElementById('typing-text').textContent = '';
   }
 
-  // Init on load
   setLang(currentLang);
 
   /* ── Progress Bar ─────────────────────────────── */
